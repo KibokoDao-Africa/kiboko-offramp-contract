@@ -26,16 +26,16 @@
 #[starknet::contract]
 mod Offramp {
     use starknet::ContractAddress;
-      use core::starknet::event::EventEmitter;
+    use core::starknet::event::EventEmitter;
     use core::traits::Into;
     use core::option::OptionTrait;
     use core::traits::TryInto;
     use core::array::ArrayTrait;
     use starknet::{get_caller_address, get_block_timestamp, get_contract_address};
     use offramp::erc20::{IERC20Dispatcher, IERC20DispatcherTrait};
-    use super::{ContractAddress, CollectiveID, CycleID, HeroID, TokenAddress};
+    use super::{ContractAddress,TokenAddress};
     use offramp::interfaces::{ Trasaction,IOfframp};
-    
+
     #[storage]
     struct Storage {
         balance: felt252,
@@ -58,13 +58,10 @@ mod Offramp {
             self.balance.read()
         }
 
-        fn offramp(ref self:phone_number,ref self:gross_amount)->T{
+        fn offramp(ref self:phone_number,ref self:net_amount)->T{
             let mut storage = Self::get_mut();
             let balance = storage.balance.read();
-            let mut markteplace_fee= 0.01 *gross_amount;
-            let deduction=500;
-            let total_deduction= markteplace_fee+deduction;
-            let net_amount= gross_amount-total_deduction;
+           
             //use chainlink adapter  to call the send money api
             //emit event
 
@@ -72,3 +69,8 @@ mod Offramp {
     }
     
 }
+// shall do this from frontend insteas so as to get net_amount
+ //let mut markteplace_fee= 0.01 *gross_amount;
+        //    let deduction=500;
+         //   let total_deduction= markteplace_fee+deduction;
+          //  let net_amount= gross_amount-total_deduction;
