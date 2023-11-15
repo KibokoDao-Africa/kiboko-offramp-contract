@@ -1,12 +1,12 @@
 //1.initialize contract.
-//2.Storafe struct .
+//2.Storage struct .
 //3. Add methods to a trait.
 //4.Implement events.
 
 #[starknet::interface]
 trait IOfframp<TContractState> {
     // fn increase_balance(ref self: TContractState, amount: felt252);
-    // fn get_balance(self: @TContractState) -> felt252;
+    fn get_balance(self: @TContractState) -> felt252;
 
     fn trasfer(ref self: TContractState,ref self:quantity)->felt252;
     fn offramp(ref self: phone_number,ref self:amount_inKes)->felt252;
@@ -18,16 +18,16 @@ mod Offramp {
     struct Storage {
         balance: felt252,
         quantity:felt252,
-        phone_number:felt252,
-        amount_inKes:felt252
+        // phone_number:felt252,
+        // amount_inKes:felt252
 
     }
 
     #[external(v0)]
     impl Offramp of super::IOPfframp<ContractState> {
         fn trasfer(ref self: ContractState, quantity: felt252) {
-            assert(amount != 0, 'Amount cannot be 0');
-            self.balance.write(self.balance.read() + amount);
+            assert(quantity != 0, 'Amount cannot be 0');
+            self.balance.write(self.balance.read() + quantity);
 
         }
 
@@ -41,7 +41,7 @@ mod Offramp {
             let deduction=500;
             let total_deduction= markteplace_fee+deduction;
             let net_amount= gross_amount-total_deduction;
-            //call chainlink to call the send money api
+            //use chainlink adapter  to call the send money api
             //emit event
 
         }
