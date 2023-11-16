@@ -1,10 +1,5 @@
-//1.initialize contract.
-//2.Storage struct .
-//3. Add methods to a trait.
-//4.Implement events.
-
 //pesedo-code
-//fetch phone number, rate
+//fetch phone number, net_amount
 //1.fn trasfer token to contract address,emit event
 
 //2.fn offramp(phone_number,gross_amount)->T{
@@ -13,7 +8,6 @@
 
 //             //emit event
 // // }
-
 
 
 
@@ -42,15 +36,47 @@ mod Offramp {
 
     #[external(v0)]
     impl Offramp of super::IOPfframp<ContractState> {
-        fn trasfer(ref self: ContractState, quantity: felt252) {
-            assert(quantity != 0, 'Amount cannot be 0');
-            self.balance.write(self.balance.read() + quantity);
+        fn trasfer(ref self: ContractState,
+         token:ContractAddress,
+         quantity: u256,
+         phone_number:felt252,
+         gross_amount:u256,
+          net_amount:u256
+         
+         ) {
+            //transfers tokens
+            //updates contract_balance
+            
+          let token_ :IERC20Dispatcher= IERC20Dispatcher{contract_address:token } ;
+          let result =token_.trasferFrom(get_caller_address(),get_contract_address(),quantity ) ;
+          if result{
+            let transaction =Transaction{
+                token,
+                quantity,
+                phone_number,
+                gross_amount,
+                net_amount
+
+            };
+            self.contract_balance.write(token,self.contract_balance.read(token)+quantity);
+
+          }
+            
+            // self.balance.write(self.balance.read() + quantity);
 
         }
 
         fn get_balance(self: @ContractState) -> felt252 {
             self.balance.read()
         }
+
+fn withdraw(ref self:contractState,token:Token,quantity:Quantity ) {
+    assert(self.owner.read()==get_caller_address(),'Only Owner can Call');
+let token_ :IERC20Dispatcher= IERC20Dispatcher{contract_address:token } ;
+let result =token_.trasfer(get_caller_address(),quantity ) ;
+self.contract_balance.write(token,self.contract_balance.read(token)-quantity);
+
+}
 
         fn offramp(ref self:phone_number,ref self:net_amount)->T{
             let mut storage = Self::get_mut();
