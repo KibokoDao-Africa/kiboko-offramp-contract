@@ -8,11 +8,6 @@
 //1.fn trasfer token to contract address,emit event
 
 //2.fn offramp(phone_number,gross_amount)->T{
-    // calculate amount to send
-    //let markertplace fee=0.001 *grass_amount;
-    // let deduction=50
-//       let total_deduction= markteplace_fee+deduction;
-//             let net_amount= gross_amount-total_deduction;
 
 //             //use chainlink adapter  to call the send money api
 
@@ -38,10 +33,10 @@ mod Offramp {
 
     #[storage]
     struct Storage {
-        balance: felt252,
-        quantity:felt252,
-        // phone_number:felt252,
-        // amount_inKes:felt252
+        owner: ContractAddress,
+        contract_balance:LegacyMap<Token,Quantity>,
+        
+        
 
     }
 
@@ -70,6 +65,7 @@ mod Offramp {
     
 }
 // shall do this from frontend insteas so as to get net_amount
+// gross_amount=no_of tokens *rate;
  //let mut markteplace_fee= 0.01 *gross_amount;
         //    let deduction=500;
          //   let total_deduction= markteplace_fee+deduction;
