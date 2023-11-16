@@ -30,14 +30,13 @@ mod Offramp {
     use offramp::erc20::{IERC20Dispatcher, IERC20DispatcherTrait};
     use super::{ContractAddress,TokenAddress};
     use offramp::interfaces::{ Trasaction,IOfframp};
+    use cycle_stark::utils::{Token,Quantity};
+
 
     #[storage]
     struct Storage {
         owner: ContractAddress,
-        contract_balance:LegacyMap<Token,Quantity>,
-        
-        
-
+        contract_balance:LegacyMap<Token,Quantity>       
     }
 
 
