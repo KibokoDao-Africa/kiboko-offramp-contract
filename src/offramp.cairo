@@ -1,16 +1,3 @@
-//pesedo-code
-//fetch phone number, net_amount
-//1.fn trasfer token to contract address,emit event
-
-//2.fn offramp(phone_number,gross_amount)->T{
-
-//             //use chainlink adapter  to call the send money api
-
-//             //emit event
-// // }
-
-
-
 
 #[starknet::contract]
 mod Offramp {
@@ -24,18 +11,19 @@ mod Offramp {
     use offramp::erc20::{IERC20Dispatcher, IERC20DispatcherTrait};
     use super::{ContractAddress,TokenAddress};
     use offramp::interfaces::{ Trasaction,IOfframp};
-    use cycle_stark::utils::{Token,Quantity};
+    use offramp::utils::{Token,Quantity};
 
 
     #[storage]
     struct Storage {
         owner: ContractAddress,
-        contract_balance:LegacyMap<Token,Quantity>       
+        contract_balance:LegacyMap<Token,Quantity> ,
+             
     }
 
 
     #[external(v0)]
-    impl Offramp of super::IOPfframp<ContractState> {
+    impl Offramp of super::IOfframp<ContractState> {
         fn trasfer(ref self: ContractState,
          token:ContractAddress,
          quantity: u256,
