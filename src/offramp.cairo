@@ -11,7 +11,7 @@ mod Offramp {
     use offramp::erc20::{IERC20Dispatcher, IERC20DispatcherTrait};
     use super::{ContractAddress,TokenAddress};
     use offramp::interfaces::{ Trasaction,IOfframp};
-    use offrap::utils::{Token,Quantity};
+    use offramp::utils::{Token,Quantity};
 
 
     #[storage]
