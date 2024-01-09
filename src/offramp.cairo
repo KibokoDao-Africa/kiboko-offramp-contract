@@ -44,24 +44,24 @@ mod Offramp {
             //updates contract_balance
 
             let token_: IERC20Dispatcher = IERC20Dispatcher { contract_address: token };
-            let result = token_
-            .transferFrom(sender_address,get_contract_address,no_of_token);
-                // .transferFrom(get_caller_address(), get_contract_address(), no_of_token); //not sure where to get the wallet address and contract address
+            let result = token_.transferFrom(sender_address, get_contract_address(), no_of_token);
+            // .transferFrom(get_caller_address(), get_contract_address(), no_of_token); //not sure where to get the wallet address and contract address
             if result {
                 let transaction = OfframpTransaction { token, no_of_token, sender_address };
                 self.contract_balance.write(token, self.contract_balance.read(token) + no_of_token);
             }
             // self.balance.write(self.balance.read() + quantity);
-            self.emit(
+            self
+                .emit(
                     OfframpTransaction {
-                        token: ContractAddress,
-                        no_of_token: u256,
-                        sender_address: ContractAdress
+                        token: ContractAddress, no_of_token: u256, sender_address: ContractAdress
                     }
                 );
         }
-//ONramp
- #[external(v0)]
+    }
+
+    //ONramp
+    #[external(v0)]
     impl Onramp of super::IOfframp<ContractState> {
         fn transactOnramp(
             ref self: ContractState,
@@ -74,15 +74,16 @@ mod Offramp {
 
             let token_: IERC20Dispatcher = IERC20Dispatcher { contract_address: token };
             let result = token_
-                .transfer(  receipient_address, get_contract_address(), no_of_token);//check here
-                // .transfer(get_caller_address(), get_contract_address(), no_of_token); //
+                .transfer(receipient_address, get_contract_address(), no_of_token); //check here
+            // .transfer(get_caller_address(), get_contract_address(), no_of_token); //
 
             if result {
                 let transaction = OfframpTransaction { token, no_of_token, sender_address };
                 self.contract_balance.write(token, self.contract_balance.read(token) + no_of_token);
             }
             // self.balance.write(self.balance.read() + quantity);
-            self.emit(
+            self
+                .emit(
                     OnrampTransaction {
                         token: ContractAddress,
                         no_of_token: u256,
@@ -90,23 +91,30 @@ mod Offramp {
                     }
                 );
         }
-
     }
 
-        fn get_balance(self: @ContractState) -> felt252 {
-            self.balance.read()
-        }
+
+    fn get_balance(self: @ContractState) -> felt252 {
+        self.balance.read()
+    }
 
 
-        fn withdraw(ref self: contractState, token: Token, no_of_token: Quantity) {
-            assert(self.owner.read() == get_caller_address(), 'Only Owner can Call');
-            let token_: IERC20Dispatcher = IERC20Dispatcher { contract_address: token };
-            let result = token_.trasfer(get_caller_address(), no_of_token);
-            self.contract_balance.write(token, self.contract_balance.read(token) - no_of_token);
-        }
+    fn withdraw(ref self: contractState, token: Token, no_of_token: Quantity) {
+        assert(self.owner.read() == get_caller_address(), 'Only Owner can Call');
+        let token_: IERC20Dispatcher = IERC20Dispatcher { contract_address: token };
+        let result = token_.trasfer(get_caller_address(), no_of_token);
+        self.contract_balance.write(token, self.contract_balance.read(token) - no_of_token);
+    }
+
+    fn donate(ref self: contractState, token: Token, no_of_token: Quantity) {
+        let token_: IERC20Dispatcher = IERC20Dispatcher { contract_address: token };
+        let result = token_
+            .transferFrom(
+                get_caller_address(), get_contract_address(), no_of_token
+            ); //shida kwa get_caller_address()
+        self.contract_balance.write(token, self.contract_balance.read(token) + no_of_token);
     }
 }
-
 // shall do this from frontend insteas so as to get net_amount
 
 //let mut markteplace_fee= 0.01 *gross_amount;
