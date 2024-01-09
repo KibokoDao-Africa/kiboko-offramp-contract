@@ -17,7 +17,7 @@ struct OnrampTransaction {
 
 #[starknet::interface]
 trait IOfframp<TContractState> {
-    fn transfer(
+    fn transactOfframp(
         ref self: @TContractState,
         token: ContractAddress,
         no_of_token: u256,
@@ -28,11 +28,11 @@ trait IOfframp<TContractState> {
 
 #[starknet::interface]
 trait IOnramp<TContractState> {
-    fn transferFrom(
+    fn transactOnramp(
         ref self: @TContractState,
         token: ContractAddress,
         no_of_token: u256,
-        sender_address: ContractAdress,
+        receipient_address: ContractAdress,
         // recipient: ContractAddress,
 
     );

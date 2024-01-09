@@ -34,7 +34,7 @@ mod Offramp {
 
     #[external(v0)]
     impl Offramp of super::IOfframp<ContractState> {
-        fn trasfer(
+        fn transactOfframp(
             ref self: ContractState,
             sender_address: ContractAdress,
             token: ContractAddress,
@@ -45,7 +45,8 @@ mod Offramp {
 
             let token_: IERC20Dispatcher = IERC20Dispatcher { contract_address: token };
             let result = token_
-                .trasferFrom(get_caller_address(), get_contract_address(), no_of_token);
+            .transferFrom(sender_address,get_contract_address,no_of_token);
+                // .transferFrom(get_caller_address(), get_contract_address(), no_of_token); //not sure where to get the wallet address and contract address
             if result {
                 let transaction = OfframpTransaction { token, no_of_token, sender_address };
                 self.contract_balance.write(token, self.contract_balance.read(token) + no_of_token);
@@ -62,7 +63,7 @@ mod Offramp {
 //ONramp
  #[external(v0)]
     impl Onramp of super::IOfframp<ContractState> {
-        fn trasferFrom(
+        fn transactOnramp(
             ref self: ContractState,
             receipient_address: ContractAdress,
             token: ContractAddress,
@@ -73,7 +74,9 @@ mod Offramp {
 
             let token_: IERC20Dispatcher = IERC20Dispatcher { contract_address: token };
             let result = token_
-                .trasferFrom(get_caller_address(), get_contract_address(), no_of_token);
+                .transfer(  receipient_address, get_contract_address(), no_of_token);//check here
+                // .transfer(get_caller_address(), get_contract_address(), no_of_token); //
+
             if result {
                 let transaction = OfframpTransaction { token, no_of_token, sender_address };
                 self.contract_balance.write(token, self.contract_balance.read(token) + no_of_token);
@@ -94,6 +97,7 @@ mod Offramp {
             self.balance.read()
         }
 
+
         fn withdraw(ref self: contractState, token: Token, no_of_token: Quantity) {
             assert(self.owner.read() == get_caller_address(), 'Only Owner can Call');
             let token_: IERC20Dispatcher = IERC20Dispatcher { contract_address: token };
@@ -102,8 +106,9 @@ mod Offramp {
         }
     }
 }
+
 // shall do this from frontend insteas so as to get net_amount
-// gross_amount=no_of tokens *rate;
+
 //let mut markteplace_fee= 0.01 *gross_amount;
 //    let deduction=500;
 //   let total_deduction= markteplace_fee+deduction;
