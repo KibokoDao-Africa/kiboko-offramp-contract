@@ -17,13 +17,20 @@ mod Offramp {
     struct Storage {
         owner: ContractAddress,
         contract_balance: LegacyMap<Token, Quantity>,
-        
     }
+
     #[event]
     #[derive(Drop, starknet::Event)]
     enum Event {
-        OfframpTransaction:OfframpTransaction,
+        OfframpTransaction: OfframpTransaction,
     }
+
+    #[event]
+    #[derive(Drop, starknet::Event)]
+    enum Event {
+        OnrampTransaction: OnrampTransaction,
+    }
+
 
     #[external(v0)]
     impl Offramp of super::IOfframp<ContractState> {
@@ -32,7 +39,6 @@ mod Offramp {
             sender_address: ContractAdress,
             token: ContractAddress,
             no_of_token: u256,
-            
         ) {
             //transfers tokens
             //updates contract_balance
@@ -44,8 +50,14 @@ mod Offramp {
                 let transaction = OfframpTransaction { token, no_of_token, sender_address };
                 self.contract_balance.write(token, self.contract_balance.read(token) + no_of_token);
             }
-        // self.balance.write(self.balance.read() + quantity);
-
+            // self.balance.write(self.balance.read() + quantity);
+            self.emit(
+                    OnrampTransaction {
+                        token: ContractAddress,
+                        no_of_token: u256,
+                        receipient_address: ContractAdress
+                    }
+                );
         }
 
 
@@ -59,8 +71,6 @@ mod Offramp {
             let result = token_.trasfer(get_caller_address(), no_of_token);
             self.contract_balance.write(token, self.contract_balance.read(token) - no_of_token);
         }
-
-       
     }
 }
 // shall do this from frontend insteas so as to get net_amount
