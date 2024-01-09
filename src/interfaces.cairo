@@ -1,11 +1,13 @@
 use starknet::ContractAddress;
 
+#[derive(Drop, starknet::Event)]
 struct OfframpTrasaction {
     token: ContractAddress,
     no_of_token: u256,
     sender_address: ContractAdress
 }
 
+#[derive(Drop, starknet::Event)]
 struct OnrampTransaction {
     token: ContractAddress,
     no_of_token: u256,
@@ -21,9 +23,22 @@ trait IOfframp<TContractState> {
         no_of_token: u256,
         sender_address: ContractAdress
     );
-
-    fn offramp(ref self: @TContractState, phone_number: felt252, net_amount: u256) -> felt252;
+ 
 }
+
+#[starknet::interface]
+trait IOnramp<TContractState> {
+    fn transferFrom(
+        ref self: @TContractState,
+        token: ContractAddress,
+        no_of_token: u256,
+        sender_address: ContractAdress,
+        // recipient: ContractAddress,
+
+    );
+ 
+}
+
 //AOB functions
 // fn get_balance(self: TContractState) -> felt252;
 // fn increase_balance(ref self: TContractState, amount: felt252);

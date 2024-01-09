@@ -17,6 +17,7 @@ mod Offramp {
     struct Storage {
         owner: ContractAddress,
         contract_balance: LegacyMap<Token, Quantity>,
+        
     }
     #[event]
     #[derive(Drop, starknet::Event)]
@@ -47,6 +48,7 @@ mod Offramp {
 
         }
 
+
         fn get_balance(self: @ContractState) -> felt252 {
             self.balance.read()
         }
@@ -58,13 +60,7 @@ mod Offramp {
             self.contract_balance.write(token, self.contract_balance.read(token) - no_of_token);
         }
 
-        fn offramp(ref self: phone_number, ref self: net_amount) -> T {
-            let mut storage = Self::get_mut();
-            let balance = storage.balance.read();
-        //use chainlink adapter  to call the send money api
-        //emit event
-
-        }
+       
     }
 }
 // shall do this from frontend insteas so as to get net_amount
