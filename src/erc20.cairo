@@ -14,3 +14,4 @@ trait IERC20<TContractState> {
     ) -> bool;
     fn approve(ref self: TContractState, spender: ContractAddress, amount: u256) -> bool;
 }
+

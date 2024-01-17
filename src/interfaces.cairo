@@ -1,27 +1,12 @@
 use starknet::ContractAddress;
 
-#[derive(Drop, starknet::Event)]
-struct OfframpTrasaction {
-    token: ContractAddress,
-    no_of_token: u256,
-    sender_address: ContractAdress
-}
-
-#[derive(Drop, starknet::Event)]
-struct OnrampTransaction {
-    token: ContractAddress,
-    no_of_token: u256,
-    receipient_address: ContractAdress
-}
-
-
 #[starknet::interface]
 trait IOfframp<TContractState> {
     fn transactOfframp(
-        ref self: @TContractState,
+        ref self: TContractState,
         token: ContractAddress,
         no_of_token: u256,
-        sender_address: ContractAdress
+        sender_address: ContractAddress
     );
  
 }
@@ -29,10 +14,10 @@ trait IOfframp<TContractState> {
 #[starknet::interface]
 trait IOnramp<TContractState> {
     fn transactOnramp(
-        ref self: @TContractState,
+        ref self: TContractState,
         token: ContractAddress,
         no_of_token: u256,
-        receipient_address: ContractAdress,
+        receipient_address: ContractAddress,
         // recipient: ContractAddress,
 
     );
