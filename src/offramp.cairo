@@ -93,19 +93,20 @@ mod Offramp {
         }
     }
 
-
+  #[external(v0)]
     fn get_balance(self: @ContractState ,token:ContractAddress)  -> u256 {
         self.contract_balance.read(token)
     }
 
-
+  #[external(v0)]
     fn withdraw(ref self: ContractState, token: Token, no_of_token: Quantity) {
         assert(self.owner.read() == get_caller_address(), 'Only Owner can Call');
         let token_: IERC20Dispatcher = IERC20Dispatcher { contract_address: token };
         let result = token_.transfer(get_caller_address(), no_of_token);
         self.contract_balance.write(token, self.contract_balance.read(token) - no_of_token);
     }
-
+    
+  #[external(v0)]
     fn donate(ref self: ContractState, token: Token, no_of_token: Quantity) {
         let token_: IERC20Dispatcher = IERC20Dispatcher { contract_address: token };
         let result = token_
